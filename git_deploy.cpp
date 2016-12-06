@@ -64,7 +64,16 @@ int main(int argc, char ** argv) {
 		query = "git -C " + usingDir + " pull " + usingLink;
 		system (query.c_str());
 	}
-	HelloWorld();
+	
+	cout << "Do you want to replace templates? (Y/N)" << endl;
+	
+	string user_input;
+	cin >> user_input;
+	
+	if ((user_input == "Y") || (user_input == "y"))
+		ReplaceTemplates(usingDir);
+	
+	
 	
 	return 0;
 }
