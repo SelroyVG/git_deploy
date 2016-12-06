@@ -15,13 +15,21 @@ int main(int argc, char ** argv) {
 		string currentAgrument = argv[argCounter];
 		
 		if (currentAgrument == "-l") //Link search
+		{	
 			usingLink = argv[argCounter + 1];
-		
+			continue;
+		}
+
 		if (currentAgrument == "-b") //Branch search
-			usingBranch = argv[argCounter + 1];
-		
+		{	
+			usingLink = argv[argCounter + 1];
+			continue;
+		}
 		if (currentAgrument == "-d") //Directory search
-			usingDir = argv[argCounter + 1];
+		{	
+			usingLink = argv[argCounter + 1];
+			continue;
+		}
 
 		if ((currentAgrument == "-h") || (currentAgrument == "--help")) //Help
 		{
