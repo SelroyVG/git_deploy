@@ -51,16 +51,19 @@ int main(int argc, char ** argv) {
 	}
 	
 	query = "mkdir " + usingDir;
-	system (query.c_str());	
-	
-	query = "git clone -b " + usingBranch + " " + usingLink + " " + usingDir;
-	system (query.c_str());
-	
-	query = "git -C " + usingDir + " reset --hard"; 
-	system (query.c_str());
-	query = "git -C " + usingDir + " pull " + usingLink;
-	cout << query << endl;
-	system (query.c_str());
+	int error_code = system (query.c_str());	
+	if (error_code == 0){
+		cout << "Creating a new copy of the repository" << endl;
+		query = "git clone -b " + usingBranch + " " + usingLink + " " + usingDir;
+		system (query.c_str());
+	} else if (error_code == 256){
+		cout << "The directory already exists, trying to update the repository" << endl;
+		query = "git -C " + usingDir + " reset --hard"; 
+		system (query.c_str());
+		query = "git -C " + usingDir + " pull " + usingLink;
+		system (query.c_str());
+	}
 
+	
 	return 0;
 }
