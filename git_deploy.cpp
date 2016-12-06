@@ -6,8 +6,8 @@ using namespace std;
 
 int main(int argc, char ** argv) {
 	
-	string usingBranch = "master";
 	string usingLink = "false";
+	string usingBranch = "master";
 	string usingDir = "false";
 	string query;
 	for (int argCounter = 1; argCounter < argc; argCounter++) 
@@ -22,12 +22,12 @@ int main(int argc, char ** argv) {
 
 		if (currentAgrument == "-b") //Branch search
 		{	
-			usingLink = argv[argCounter + 1];
+			usingBranch = argv[argCounter + 1];
 			continue;
 		}
 		if (currentAgrument == "-d") //Directory search
 		{	
-			usingLink = argv[argCounter + 1];
+			usingDir = argv[argCounter + 1];
 			continue;
 		}
 
