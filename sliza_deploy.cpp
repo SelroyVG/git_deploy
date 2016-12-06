@@ -4,30 +4,52 @@ using namespace std;
 
 int ReplaceTemplates(string usingDir){
 	string configFile = "config.php";
-	while(!FileIsExist(usingDir + "/" + configFile) && !(configFile == "0")){
-		cout << "File " << configFile << " not found! Specify your configuration file. (Type '0' for cancel)" << endl;
+	string configTemplatesFile = "config_templates.csv";
+	string sTemplate;
+	string sReplace;
+	
+	while(!FileIsExist(configTemplatesFile)){
+		cout << "File " << configTemplatesFile << " not found! Specify a file that contains templates." << endl;
+		cin >> configTemplatesFile;
+	}
+	
+	while(!FileIsExist(usingDir + "/" + configFile)){
+		cout << "File " << configFile << " not found! Specify a configuration file in your repository." << endl;
 		cin >> configFile;
 	}
-	if(configFile == "0")
-		return 0;
-	string textFile;
+	
+	string configTextFile;
 	ifstream fin(usingDir + "/" + configFile);
-	getline ( fin, textFile, '\0' );
+	getline (fin, configTextFile, '\0'); // Reads config file into a string
 	
+	string templateLine;
+	ifstream finTemplate(configTemplatesFile);
+	while (getline (finTemplate, templateLine)){
+		size_t pos = templateLine.find(",");
+		sTemplate = templateLine.substr(0, pos);
+		sReplace = templateLine.substr(pos+1);
+		
+		if (sReplace.find("\r") != string::npos){
+			sReplace.pop_back();
+		}
+		
+		long pointerPos;
+		while((pointerPos = configTextFile.find(sTemplate,0)) != string::npos)
+			configTextFile.replace(pointerPos, sTemplate.length(), sReplace);
+		
+		
+	}
+
 	
-	long sPosition;
-	string stringTemplate = "%db_username%";
-	string stringReplace = "sliza";
-	while((sPos = textFile.find(stringTemplate,0)) != string::npos)
-        textFile.replace(sPos,stringTemplate.length(),stringReplace);
-	
-	cout << textFile << endl;
+	cout << configTextFile << endl;
 	fin.close();
 	
 	
 	ofstream fout(usingDir + "/" + configFile, ios_base::trunc);
-	fout << textFile;
+	fout << configTextFile;
 	fout.close();
+	
+	return 0;
 }
 
 bool FileIsExist(string filePath)
