@@ -10,6 +10,8 @@ int main(int argc, char ** argv) {
 	string usingLink = "false";
 	string usingBranch = "master";
 	string usingDir = "false";
+	bool usingSliza = false;
+	
 	string query;
 	for (int argCounter = 1; argCounter < argc; argCounter++) 
 	{
@@ -29,6 +31,12 @@ int main(int argc, char ** argv) {
 		if (currentAgrument == "-d") //Directory search
 		{	
 			usingDir = argv[argCounter + 1];
+			continue;
+		}
+		
+		if (currentAgrument == "--sliza")
+		{	
+			usingSliza = true;
 			continue;
 		}
 
@@ -65,14 +73,15 @@ int main(int argc, char ** argv) {
 		system (query.c_str());
 	}
 	
-	cout << "Do you want to replace templates? (Y/N)" << endl;
-	
-	string user_input;
-	cin >> user_input;
-	
-	if ((user_input == "Y") || (user_input == "y"))
-		ReplaceTemplates(usingDir);
-	
+	if(usingSliza){
+		cout << "Do you want to replace templates? (Y/N)" << endl;
+		
+		string user_input;
+		cin >> user_input;
+		
+		if ((user_input == "Y") || (user_input == "y"))
+			ReplaceTemplates(usingDir);
+	}
 	
 	
 	return 0;
