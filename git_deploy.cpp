@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <string.h>
+#include "sliza_deploy.h"
 
 using namespace std;
 
@@ -63,7 +64,7 @@ int main(int argc, char ** argv) {
 		query = "git -C " + usingDir + " pull " + usingLink;
 		system (query.c_str());
 	}
-
+	HelloWorld();
 	
 	return 0;
 }
