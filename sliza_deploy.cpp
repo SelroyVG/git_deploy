@@ -5,7 +5,7 @@ using namespace std;
 int ReplaceTemplates(std::string tempDir, bool usingCron){
 	string currentFile;
 	string configTemplates = "config/sliza_templates.csv";
-	string configExtensions = "config/extensions.txt";
+	string configExtensions = "config/extensions";
 	string sTemplate;
 	string sReplace;
 	int filesCounter = 0;
