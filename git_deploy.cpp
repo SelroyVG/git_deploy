@@ -10,38 +10,35 @@ int main(int argc, char ** argv) {
 	string usingLink = "false";
 	string usingBranch = "master";
 	string usingDir = "false";
-	bool usingSliza = false;
+	bool usingPatterns = false;
+	bool usingCron = true;
 	
 	string query;
 	for (int argCounter = 1; argCounter < argc; argCounter++) 
 	{
 		string currentAgrument = argv[argCounter];
 		
-		if (currentAgrument == "-l") //Link search
-		{	
+		if (currentAgrument == "-l"){ //Link search
 			usingLink = argv[argCounter + 1];
 			continue;
 		}
-
-		if (currentAgrument == "-b") //Branch search
-		{	
+		if (currentAgrument == "-b"){ //Branch search
 			usingBranch = argv[argCounter + 1];
 			continue;
 		}
-		if (currentAgrument == "-d") //Directory search
-		{	
+		if (currentAgrument == "-d"){ //Directory search	
 			usingDir = argv[argCounter + 1];
 			continue;
 		}
-		
-		if (currentAgrument == "--sliza")
-		{	
-			usingSliza = true;
+		if (currentAgrument == "--include-patterns"){
+			usingPatterns = true;
 			continue;
 		}
-
-		if ((currentAgrument == "-h") || (currentAgrument == "--help")) //Help
-		{
+		if (currentAgrument == "--disable-input"){
+			usingCron = false;
+			continue;
+		}
+		if ((currentAgrument == "-h") || (currentAgrument == "--help")){ //Help
 			cout << "Usage: ./git_deploy -l <Repository link> -d <Output directory> [-b <Branch name>]" << endl;
 			return 0;
 		}
@@ -73,14 +70,18 @@ int main(int argc, char ** argv) {
 		system (query.c_str());
 	}
 	
-	if(usingSliza){
-		cout << "Do you want to replace templates? (Y/N)" << endl;
-		
-		string user_input;
-		cin >> user_input;
-		
-		if ((user_input == "Y") || (user_input == "y"))
-			ReplaceTemplates(usingDir);
+	if(usingPatterns){
+		if (usingCron){
+			cout << "Do you want to replace templates? (Y/N)" << endl;
+			string user_input;
+			cin >> user_input;
+			if ((user_input == "Y") || (user_input == "y"))
+				ReplaceTemplates(usingDir, usingCron);
+		} 
+		else{
+			cout << "Trying to replace templates." << endl;
+			ReplaceTemplates(usingDir, usingCron);
+		}
 	}
 	
 	

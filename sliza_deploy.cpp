@@ -2,21 +2,27 @@
 
 using namespace std;
 
-int ReplaceTemplates(string usingDir){
+int ReplaceTemplates(std::string usingDir, bool usingCron){
 	string configFile = "config.php";
 	string configTemplatesFile = "config_templates.csv";
 	string sTemplate;
 	string sReplace;
 	
-	while(!FileIsExist(configTemplatesFile)){
-		cout << "File " << configTemplatesFile << " not found! Specify a file that contains templates." << endl;
-		cin >> configTemplatesFile;
-	}
-	
-	while(!FileIsExist(usingDir + "/" + configFile)){
-		cout << "File " << configFile << " not found! Specify a configuration file in your repository." << endl;
-		cin >> configFile;
-	}
+	if (usingCron){
+		while(!FileIsExist(configTemplatesFile)){
+			cout << "File " << configTemplatesFile << " not found! Specify a file that contains templates." << endl;
+			cin >> configTemplatesFile;
+		}
+		
+		while(!FileIsExist(usingDir + "/" + configFile)){
+			cout << "File " << configFile << " not found! Specify a configuration file in your repository." << endl;
+			cin >> configFile;
+		}
+	} else 
+		if(!FileIsExist(configTemplatesFile) || !FileIsExist(usingDir + "/" + configFile)){
+			cout << "File not found! Pattern replacing aborted." << endl;
+			return 2;
+		}
 	
 	string configTextFile;
 	ifstream fin(usingDir + "/" + configFile);
@@ -39,11 +45,8 @@ int ReplaceTemplates(string usingDir){
 		
 		
 	}
-
 	
-	cout << configTextFile << endl;
 	fin.close();
-	
 	
 	ofstream fout(usingDir + "/" + configFile, ios_base::trunc);
 	fout << configTextFile;
