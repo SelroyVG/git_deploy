@@ -1,3 +1,4 @@
 git_deploy
 *.o
-*.csv
+.temp_fileslist
+.temp_deploy_dir

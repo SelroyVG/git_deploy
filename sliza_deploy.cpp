@@ -2,57 +2,89 @@
 
 using namespace std;
 
-int ReplaceTemplates(std::string usingDir, bool usingCron){
-	string configFile = "config.php";
-	string configTemplatesFile = "config_templates.csv";
+int ReplaceTemplates(std::string tempDir, bool usingCron){
+	string currentFile;
+	string configTemplates = "config/sliza_templates.csv";
+	string configExtensions = "config/extensions.txt";
 	string sTemplate;
 	string sReplace;
+	int filesCounter = 0;
 	
 	if (usingCron){
-		while(!FileIsExist(configTemplatesFile)){
-			cout << "File " << configTemplatesFile << " not found! Specify a file that contains templates." << endl;
-			cin >> configTemplatesFile;
+		while(!FileIsExist(configTemplates)){
+			cout << "File " << configTemplates << " not found! Specify a file that contains templates." << endl;
+			cin >> configTemplates;
 		}
 		
-		while(!FileIsExist(usingDir + "/" + configFile)){
-			cout << "File " << configFile << " not found! Specify a configuration file in your repository." << endl;
-			cin >> configFile;
+		while(!FileIsExist(configExtensions)){
+			cout << "File " << configExtensions << " not found! Specify a file that contains templates." << endl;
+			cin >> configExtensions;
 		}
+		
 	} else 
-		if(!FileIsExist(configTemplatesFile) || !FileIsExist(usingDir + "/" + configFile)){
-			cout << "File not found! Pattern replacing aborted." << endl;
+		if(!FileIsExist(configTemplates) || !FileIsExist(configExtensions)){
+			cout << "A necessary config file not found! Pattern replacing aborted." << endl;
 			return 2;
 		}
 	
-	string configTextFile;
-	ifstream fin(usingDir + "/" + configFile);
-	getline (fin, configTextFile, '\0'); // Reads config file into a string
+	system ("rm -f .temp_fileslist");
 	
-	string templateLine;
-	ifstream finTemplate(configTemplatesFile);
-	while (getline (finTemplate, templateLine)){
-		size_t pos = templateLine.find(",");
-		sTemplate = templateLine.substr(0, pos);
-		sReplace = templateLine.substr(pos+1);
+	string extension;
+	ifstream finExtensions(configExtensions);
+	while (getline (finExtensions, extension)){
+		extension = CutString(extension);
+		string query = "find " + tempDir + " -name *" + extension + " > .temp_fileslist";
+		system(query.c_str());
 		
-		if (sReplace.find("\r") != string::npos){
-			sReplace.pop_back();
+		ifstream finFileList(".temp_fileslist");
+		while (getline (finFileList, currentFile)){
+			currentFile = CutString(currentFile);
+			filesCounter++;
+			
+			string textFile;
+			ifstream fin(currentFile);
+			getline (fin, textFile, '\0'); // Reads a file into a string
+			
+			string templateLine;
+			ifstream finTemplate(configTemplates);
+			while (getline (finTemplate, templateLine)){
+				size_t pos = templateLine.find(",");
+				sTemplate = templateLine.substr(0, pos);
+				sReplace = templateLine.substr(pos+1);
+				
+				if (sReplace.find("\r") != string::npos){
+					sReplace.pop_back();
+				}
+				
+				long pointerPos;
+				while((pointerPos = textFile.find(sTemplate,0)) != string::npos)
+					textFile.replace(pointerPos, sTemplate.length(), sReplace);
+				
+				
+			}
+			finTemplate.close();
+			fin.close();
+			
+			ofstream fout(currentFile, ios_base::trunc);
+			fout << textFile;
+			fout.close();
+			
+			
 		}
-		
-		long pointerPos;
-		while((pointerPos = configTextFile.find(sTemplate,0)) != string::npos)
-			configTextFile.replace(pointerPos, sTemplate.length(), sReplace);
 		
 		
 	}
-	
-	fin.close();
-	
-	ofstream fout(usingDir + "/" + configFile, ios_base::trunc);
-	fout << configTextFile;
-	fout.close();
+	finExtensions.close();
+	cout << "Templates replased, " << filesCounter << " files parsed." << endl;
 	
 	return 0;
+}
+
+string CutString(string OriginalString){
+	if (OriginalString.find("\r") != string::npos){
+		OriginalString.pop_back();
+	}
+	return OriginalString;
 }
 
 bool FileIsExist(string filePath)
