@@ -44,7 +44,7 @@ int main(int argc, char ** argv) {
 			continue;
 		}
 		if ((currentAgrument == "-h") || (currentAgrument == "--help")){ //Help
-			cout << "Usage: ./git_deploy -l <Repository link> -d <Output directory> [-b <Branch name>]" << endl;
+			cout << "Usage: ./git_deploy -l <Repository link> -d <Output directory> [-b <Branch name> --include-patterns --disable-input]" << endl;
 			return 0;
 		}
 		
@@ -61,19 +61,9 @@ int main(int argc, char ** argv) {
 		return 2;
 	}
 	
-/*	query = "mkdir " + usingDir;
-	int error_code = system (query.c_str());	
-	if (error_code == 0){*/
-		cout << "Creating a new copy of the repository" << endl;
-		query = "git clone -b " + usingBranch + " " + usingLink + " " + tempDir;
-		system (query.c_str());
-/*	} else if (error_code == 256){
-		cout << "The directory already exists, trying to update the repository" << endl;
-		query = "git -C " + usingDir + " reset --hard"; 
-		system (query.c_str());
-		query = "git -C " + usingDir + " pull " + usingLink;
-		system (query.c_str());
-	}*/
+	cout << "Creating a new copy of the repository/" << endl;
+	query = "git clone -b " + usingBranch + " " + usingLink + " " + tempDir;
+	system (query.c_str());
 	
 	if(usingPatterns){
 		if (usingCron){
@@ -88,8 +78,18 @@ int main(int argc, char ** argv) {
 			ReplaceTemplates(tempDir, usingCron);
 		}
 	}
+	query = "mkdir " + usingDir;
+	int error_code = system (query.c_str());	
+	if (error_code == 0)
+		cout << "Directory " << usingDir << " not found! Creating an empty directory " << usingDir << endl;
 	
 	query = "cp -R " + tempDir + "/* " + usingDir + "/";
+	system(query.c_str());
+	query = "cp -R " + tempDir + "/.git " + usingDir + "/";
+	system(query.c_str());
+	query = "cp -R " + tempDir + "/.htaccess " + usingDir + "/";
+	system(query.c_str());
+	query = "cp -R " + tempDir + "/.gitignore " + usingDir + "/";
 	system(query.c_str());
 	cout << "Repository copied into " << usingDir << endl;
 	return 0;

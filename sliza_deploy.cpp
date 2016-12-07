@@ -68,11 +68,7 @@ int ReplaceTemplates(std::string tempDir, bool usingCron){
 			ofstream fout(currentFile, ios_base::trunc);
 			fout << textFile;
 			fout.close();
-			
-			
 		}
-		
-		
 	}
 	finExtensions.close();
 	cout << "Templates replased, " << filesCounter << " files parsed." << endl;
