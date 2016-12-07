@@ -85,11 +85,7 @@ int main(int argc, char ** argv) {
 	
 	query = "cp -R " + tempDir + "/* " + usingDir + "/";
 	system(query.c_str());
-	query = "cp -R " + tempDir + "/.git " + usingDir + "/";
-	system(query.c_str());
-	query = "cp -R " + tempDir + "/.htaccess " + usingDir + "/";
-	system(query.c_str());
-	query = "cp -R " + tempDir + "/.gitignore " + usingDir + "/";
+	query = "cp -R " + tempDir + "/.[a-zA-Z0-9]* " + usingDir + "/";
 	system(query.c_str());
 	cout << "Repository copied into " << usingDir << endl;
 	return 0;
