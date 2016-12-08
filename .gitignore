@@ -1,5 +1,3 @@
 git_deploy
 *.o
-.temp_fileslist
-.temp_deploy_dir
 .temp
