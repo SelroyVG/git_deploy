@@ -27,16 +27,16 @@ int ReplaceTemplates(std::string tempDir, bool usingCron){
 			return 2;
 		}
 	
-	system ("rm -f .temp_fileslist");
+	system ("rm -f .temp/fileslist");
 	
 	string extension;
 	ifstream finExtensions(configExtensions);
 	while (getline (finExtensions, extension)){
 		extension = CutString(extension);
-		string query = "find " + tempDir + " -name *" + extension + " > .temp_fileslist";
+		string query = "find " + tempDir + " -name *" + extension + " > .temp/fileslist";
 		system(query.c_str());
 		
-		ifstream finFileList(".temp_fileslist");
+		ifstream finFileList(".temp/fileslist");
 		while (getline (finFileList, currentFile)){
 			currentFile = CutString(currentFile);
 			filesCounter++;

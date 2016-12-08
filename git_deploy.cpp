@@ -13,10 +13,10 @@ int main(int argc, char ** argv) {
 	string usingDir = "false";
 	bool usingPatterns = false;
 	bool usingCron = true;
-	string tempDir = ".temp_deploy_dir";
+	string tempDir = ".temp/temp_rep";
 	
-	system("rm -rf .temp_deploy_dir");
-	system("mkdir .temp_deploy_dir");
+	system("rm -rf .temp/temp_rep");
+	system("mkdir .temp/temp_rep");
 	
 	string query;
 	for (int argCounter = 1; argCounter < argc; argCounter++) 
