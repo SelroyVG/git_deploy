@@ -61,7 +61,7 @@ int main(int argc, char ** argv) {
 		return 2;
 	}
 	
-	cout << "Creating a new copy of the repository/" << endl;
+	cout << "Creating a new copy of the repository." << endl;
 	query = "git clone -b " + usingBranch + " " + usingLink + " " + tempDir;
 	system (query.c_str());
 	
@@ -74,18 +74,18 @@ int main(int argc, char ** argv) {
 				ReplaceTemplates(tempDir, usingCron);
 		} 
 		else{
-			cout << "Trying to replace templates." << endl;
+			cout << "Trying to replace templates..." << endl;
 			ReplaceTemplates(tempDir, usingCron);
 		}
 	}
-	query = "mkdir " + usingDir;
+	query = "mkdir " + usingDir + " 2>> .temp/bash_err";
 	int error_code = system (query.c_str());	
 	if (error_code == 0)
 		cout << "Directory " << usingDir << " not found! Creating an empty directory " << usingDir << endl;
 	
 	query = "cp -R " + tempDir + "/* " + usingDir + "/";
 	system(query.c_str());
-	query = "cp -R " + tempDir + "/.[a-zA-Z0-9]* " + usingDir + "/";
+	query = "cp -R " + tempDir + "/.[a-zA-Z0-9]* " + usingDir + "/ 2>> .temp/bash_err";
 	system(query.c_str());
 	cout << "Repository copied into " << usingDir << endl;
 	return 0;

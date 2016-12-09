@@ -23,7 +23,7 @@ int ReplaceTemplates(std::string tempDir, bool usingCron){
 		
 	} else 
 		if(!FileIsExist(configTemplates) || !FileIsExist(configExtensions)){
-			cout << "A necessary config file not found! Pattern replacing aborted." << endl;
+			cout << "A necessary config file not found! Replacing templates operation aborted." << endl;
 			return 2;
 		}
 	
