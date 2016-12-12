@@ -23,15 +23,15 @@ int main(int argc, char ** argv) {
 	{
 		string currentAgrument = argv[argCounter];
 		
-		if (currentAgrument == "-l"){ //Link search
+		if ((currentAgrument == "-l") || (currentAgrument == "--link")){ //Link search
 			usingLink = argv[argCounter + 1];
 			continue;
 		}
-		if (currentAgrument == "-b"){ //Branch search
+		if ((currentAgrument == "-b") || (currentAgrument == "--branch")){ //Branch search
 			usingBranch = argv[argCounter + 1];
 			continue;
 		}
-		if (currentAgrument == "-d"){ //Directory search	
+		if ((currentAgrument == "-d") || (currentAgrument == "--directory")){ //Directory search	
 			usingDir = argv[argCounter + 1];
 			continue;
 		}
@@ -78,14 +78,14 @@ int main(int argc, char ** argv) {
 			ReplaceTemplates(tempDir, usingCron);
 		}
 	}
-	query = "mkdir " + usingDir + " 2>> .temp/bash_err";
+	query = "mkdir " + usingDir + " 2>> .temp/bash_log";
 	int error_code = system (query.c_str());	
 	if (error_code == 0)
 		cout << "Directory " << usingDir << " not found! Creating an empty directory " << usingDir << endl;
 	
 	query = "cp -R " + tempDir + "/* " + usingDir + "/";
 	system(query.c_str());
-	query = "cp -R " + tempDir + "/.[a-zA-Z0-9]* " + usingDir + "/ 2>> .temp/bash_err";
+	query = "cp -R " + tempDir + "/.[a-zA-Z0-9]* " + usingDir + "/ 2>> .temp/bash_log";
 	system(query.c_str());
 	cout << "Repository copied into " << usingDir << endl;
 	return 0;
