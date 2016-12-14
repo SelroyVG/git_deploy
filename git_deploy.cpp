@@ -8,9 +8,9 @@ using namespace std;
 
 int main(int argc, char ** argv) {
 	
-	string usingLink = "false";
+	string usingLink;
+	string usingDir;
 	string usingBranch = "master";
-	string usingDir = "false";
 	bool usingPatterns = false;
 	bool usingCron = true;
 	string tempDir = ".temp/temp_rep";
@@ -50,12 +50,12 @@ int main(int argc, char ** argv) {
 		
 		
 	}
-	if (usingLink == "false")
+	if (usingLink.length() == 0)
 	{
 		cout << "Error: repository link not specified!" << endl;
 		return 1;
 	}
-	if (usingDir == "false")
+	if (usingDir.length() == 0)
 	{
 		cout << "Error: destination directory not specified!" << endl;
 		return 2;
